@@ -6,88 +6,116 @@
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 10:00:00 by mkazuhik          #+#    #+#             */
-/*   Updated: 2025/08/04 05:08:49 by mkazuhik         ###   ########.fr       */
+/*   Updated: 2025/08/05 04:50:00 by mkazuhik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-static void	handle_error(void)
+static int	parse_single_arg(char *arg, t_stacks *stacks)
 {
-	ft_putstr_fd("Error\n", 2);
-	exit(1);
+	char	**numbers;
+	int		i;
+	int		num;
+
+	numbers = ft_split(arg, ' ');
+	if (!numbers)
+		return (0);
+	i = 0;
+	while (numbers[i])
+	{
+		if (!is_valid_number(numbers[i]))
+		{
+			free_array(numbers);
+			return (0);
+		}
+		num = ft_atoi(numbers[i]);
+		push(stacks->stack_a, num);
+		i++;
+	}
+	free_array(numbers);
+	return (1);
 }
 
-static void	cleanup_stacks(t_stacks *stacks)
+static int	parse_multiple_args(int argc, char **argv, t_stacks *stacks)
 {
-	if (stacks)
+	int	i;
+	int	num;
+
+	i = 1;
+	while (i < argc)
 	{
-		if (stacks->stack_a)
-			clear_stack(stacks->stack_a);
-		if (stacks->stack_b)
-			clear_stack(stacks->stack_b);
-		if (stacks->commands)
-			free_commands(stacks->commands);
-		free(stacks);
+		if (!is_valid_number(argv[i]))
+			return (0);
+		num = ft_atoi(argv[i]);
+		push(stacks->stack_a, num);
+		i++;
 	}
+	return (1);
 }
 
-static void	process_and_sort(t_stacks *stacks, char **parsed_args)
+static void	reverse_stack(t_stack *stack)
 {
-	if (check_duplicates(stacks->stack_a))
-	{
-		cleanup_stacks(stacks);
-		if (parsed_args)
-			free_split_args(parsed_args);
-		handle_error();
-	}
-	if (!is_sorted(stacks->stack_a))
-	{
-		sort_stack(stacks);
-		optimize_commands(stacks);
-		print_commands(stacks);
-	}
-}
+	t_node	*current;
+	t_node	*temp;
 
-static void	initialize_stacks(t_stacks **stacks, char **parsed_args)
-{
-	*stacks = (t_stacks *)malloc(sizeof(t_stacks));
-	if (!*stacks)
+	if (stack->size <= 1)
+		return ;
+	current = stack->head;
+	while (current)
 	{
-		if (parsed_args)
-			free_split_args(parsed_args);
-		handle_error();
+		temp = current->next;
+		current->next = current->prev;
+		current->prev = temp;
+		current = temp;
 	}
-	(*stacks)->stack_a = create_stack();
-	(*stacks)->stack_b = create_stack();
-	(*stacks)->commands = NULL;
-	if (!(*stacks)->stack_a || !(*stacks)->stack_b)
-	{
-		cleanup_stacks(*stacks);
-		if (parsed_args)
-			free_split_args(parsed_args);
-		handle_error();
-	}
+	temp = stack->head;
+	stack->head = stack->tail;
+	stack->tail = temp;
 }
 
 int	main(int argc, char **argv)
 {
 	t_stacks	*stacks;
-	char		**parsed_args;
-	int			new_argc;
 
 	if (argc < 2)
 		return (0);
-	if (!validate_input_with_parsing(argc, argv, &parsed_args, &new_argc))
-		handle_error();
-	initialize_stacks(&stacks, parsed_args);
-	if (parsed_args)
-		init_stack_from_split_args(stacks->stack_a, parsed_args);
+	stacks = malloc(sizeof(t_stacks));
+	if (!stacks)
+		return (1);
+	stacks->stack_a = create_stack();
+	stacks->stack_b = create_stack();
+	if (!stacks->stack_a || !stacks->stack_b)
+	{
+		error_exit(stacks);
+		return (1);
+	}
+	if (argc == 2)
+	{
+		if (!parse_single_arg(argv[1], stacks))
+		{
+			error_exit(stacks);
+			return (1);
+		}
+	}
 	else
-		init_stack_from_args(stacks->stack_a, argc, argv);
-	process_and_sort(stacks, parsed_args);
-	cleanup_stacks(stacks);
-	if (parsed_args)
-		free_split_args(parsed_args);
+	{
+		if (!parse_multiple_args(argc, argv, stacks))
+		{
+			error_exit(stacks);
+			return (1);
+		}
+	}
+	reverse_stack(stacks->stack_a);
+	if (check_duplicates(stacks->stack_a))
+	{
+		error_exit(stacks);
+		return (1);
+	}
+	if (!is_sorted(stacks->stack_a))
+		sort_stack(stacks);
+	clear_stack(stacks->stack_a);
+	clear_stack(stacks->stack_b);
+	free(stacks);
 	return (0);
-}
+} 
