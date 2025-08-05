@@ -121,16 +121,14 @@ void	sort_seven_or_more(t_stacks *stacks)
 {
 	// シンプルなクイックソート実装
 	// 1. ピボットを選択し、aからbに分割
+	int	pivot;
+	pivot = get_pivot(stacks->stack_a);
 	sort_a_to_b(stacks, stacks->stack_a->size);
 	
 
 	quick_sort_b_to_a(stacks, stacks->stack_b->size);
-	// while (i <get_pivot(stacks->stack_a))
-	// {
-	// 	push_largest_to_b(stacks);
-	// 	i++;
-	// }
-	quick_sort_a_to_b(stacks, stacks->stack_a->size);
+	sort_half_smallest_to_b(stacks);
+	quick_sort_a_to_b(stacks, stacks->stack_a->size, pivot);
 	while (!is_empty(stacks->stack_b))
 	{
 		push_largest_to_a(stacks);
@@ -218,7 +216,7 @@ void	sort_a_to_b(t_stacks *stacks, int size)
 	}
 }
 
-void	quick_sort_a_to_b(t_stacks *stacks, int size)
+void	quick_sort_a_to_b(t_stacks *stacks, int size, int pi)
 {
 	int	pivot;
 	int	pushed;
@@ -235,7 +233,7 @@ void	quick_sort_a_to_b(t_stacks *stacks, int size)
 	{
 		if (stacks->stack_a->head->value <= pivot)
 		{
-			if (stacks->stack_a->head->value < (pivot * 2) - 30)
+			if (stacks->stack_a->head->value <= (pi + 30))
 			{
 				pb(stacks);
 				pushed++;
@@ -261,7 +259,7 @@ void	quick_sort_a_to_b(t_stacks *stacks, int size)
 	}
 	
 	// 再帰的にソート
-	quick_sort_a_to_b(stacks, size - pushed);
+	quick_sort_a_to_b(stacks, size - pushed, pi + pushed);
 }
 
 void	push_largest_to_a(t_stacks *stacks)
@@ -299,37 +297,49 @@ void	push_largest_to_a(t_stacks *stacks)
 	pa(stacks);
 }
 
-void	push_largest_to_b(t_stacks *stacks)
+// スタックAからスタックBに小さいものから半分までソートする関数
+void	sort_half_smallest_to_b(t_stacks *stacks)
 {
-	int	max_val;
-	int	max_pos;
-	int	stack_size;
+	int	original_size;
+	int	target_size;
+	int	pushed_count;
 
 	if (is_empty(stacks->stack_a))
 		return;
 
-	max_val = get_pivot(stacks->stack_a);
-	max_pos = get_position(stacks->stack_a, max_val);
-	stack_size = stacks->stack_a->size;
+	original_size = stacks->stack_a->size;
+	target_size = original_size / 2;  // 半分のサイズ
+	pushed_count = 0;
 
-	// 最大値をトップに移動
-	if (max_pos <= stack_size / 2)
+	// スタックAの要素を半分まで、小さいものから順にBに移動
+	while (pushed_count < target_size)
 	{
-		while (max_pos > 0)
+		// 現在のスタックAから最小値を探す
+		int min_val = get_min(stacks->stack_a);
+		int min_pos = get_position(stacks->stack_a, min_val);
+		int stack_size = stacks->stack_a->size;
+
+		// 最小値をトップに移動
+		if (min_pos <= stack_size / 2)
 		{
-			ra(stacks);
-			max_pos--;
+			while (min_pos > 0)
+			{
+				ra(stacks);
+				min_pos--;
+			}
 		}
-	}
-	else
-	{
-		while (max_pos < stack_size)
+		else
 		{
-			rra(stacks);
-			max_pos++;
+			while (min_pos < stack_size)
+			{
+				rra(stacks);
+				min_pos++;
+			}
 		}
+
+		// 最小値をBにpush
+		pb(stacks);
+		pushed_count++;
 	}
 
-	// 最大値をbにpush
-	pb(stacks);
-} 
+}
