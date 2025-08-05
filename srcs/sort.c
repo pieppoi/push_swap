@@ -121,16 +121,23 @@ void	sort_seven_or_more(t_stacks *stacks)
 {
 	// シンプルなクイックソート実装
 	// 1. ピボットを選択し、aからbに分割
-	quick_sort_a_to_b(stacks, stacks->stack_a->size);
+	sort_a_to_b(stacks, stacks->stack_a->size);
 	
-	// 2. bからaに戻す（ソート済み）
+
+	quick_sort_b_to_a(stacks, stacks->stack_b->size);
+	// while (i <get_pivot(stacks->stack_a))
+	// {
+	// 	push_largest_to_b(stacks);
+	// 	i++;
+	// }
+	quick_sort_a_to_b(stacks, stacks->stack_a->size);
 	while (!is_empty(stacks->stack_b))
 	{
 		push_largest_to_a(stacks);
 	}
 }
 
-void	quick_sort_a_to_b(t_stacks *stacks, int size)
+void	quick_sort_b_to_a(t_stacks *stacks, int size)
 {
 	int	pivot;
 	int	pushed;
@@ -139,6 +146,51 @@ void	quick_sort_a_to_b(t_stacks *stacks, int size)
 	if (size <= 1)
 		return ;
 	
+	pivot = get_pivot(stacks->stack_b);
+	pushed = 0;
+	rotated = 0;
+	// ピボットより小さい値をbにpush
+	while (pushed + rotated < size)
+	{
+		if (stacks->stack_b->head->value >= pivot)
+		{
+			if (stacks->stack_b->head->value >= (pivot * 2) - 30)
+			{
+				pa(stacks);
+				pushed++;
+			}
+			else
+			{
+				rb(stacks);
+				rotated++;
+			}
+		}
+		else
+		{
+			rb(stacks);
+			rotated++;
+		}
+	}
+	
+	// 回転した分を戻す
+	while (rotated > 0)
+	{
+		rrb(stacks);
+		rotated--;
+	}
+	
+	// 再帰的にソート
+	quick_sort_b_to_a(stacks, size - pushed);
+}
+
+void	sort_a_to_b(t_stacks *stacks, int size)
+{
+	int	pivot;
+	int	pushed;
+	int	rotated;
+
+	if (size <= 1)
+		return ;
 	pivot = get_pivot(stacks->stack_a);
 	pushed = 0;
 	rotated = 0;
@@ -150,6 +202,49 @@ void	quick_sort_a_to_b(t_stacks *stacks, int size)
 		{
 			pb(stacks);
 			pushed++;
+		}
+		else
+		{
+			ra(stacks);
+			rotated++;
+		}
+	}
+	
+	// 回転した分を戻す
+	while (rotated > 0)
+	{
+		rra(stacks);
+		rotated--;
+	}
+}
+
+void	quick_sort_a_to_b(t_stacks *stacks, int size)
+{
+	int	pivot;
+	int	pushed;
+	int	rotated;
+
+	if (size <= 1)
+		return ;
+	pivot = get_pivot(stacks->stack_a);
+	pushed = 0;
+	rotated = 0;
+	
+	// ピボットより小さい値をbにpush
+	while (pushed + rotated < size)
+	{
+		if (stacks->stack_a->head->value <= pivot)
+		{
+			if (stacks->stack_a->head->value < (pivot * 2) - 30)
+			{
+				pb(stacks);
+				pushed++;
+			}
+			else
+			{
+				ra(stacks);
+				rotated++;
+			}
 		}
 		else
 		{
@@ -202,4 +297,39 @@ void	push_largest_to_a(t_stacks *stacks)
 
 	// 最大値をaにpush
 	pa(stacks);
+}
+
+void	push_largest_to_b(t_stacks *stacks)
+{
+	int	max_val;
+	int	max_pos;
+	int	stack_size;
+
+	if (is_empty(stacks->stack_a))
+		return;
+
+	max_val = get_pivot(stacks->stack_a);
+	max_pos = get_position(stacks->stack_a, max_val);
+	stack_size = stacks->stack_a->size;
+
+	// 最大値をトップに移動
+	if (max_pos <= stack_size / 2)
+	{
+		while (max_pos > 0)
+		{
+			ra(stacks);
+			max_pos--;
+		}
+	}
+	else
+	{
+		while (max_pos < stack_size)
+		{
+			rra(stacks);
+			max_pos++;
+		}
+	}
+
+	// 最大値をbにpush
+	pb(stacks);
 } 

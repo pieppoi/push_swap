@@ -6,7 +6,7 @@
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/19 10:00:00 by mkazuhik          #+#    #+#             */
-/*   Updated: 2025/08/05 04:50:00 by mkazuhik         ###   ########.fr       */
+/*   Updated: 2025/08/06 06:26:38 by mkazuhik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,10 @@ void	push_smallest_to_b(t_stacks *stacks);
 
 // 7個以上のソート（クイックソート）
 void	quick_sort_a_to_b(t_stacks *stacks, int size);
+void	quick_sort_b_to_a(t_stacks *stacks, int size);
+void	sort_a_to_b(t_stacks *stacks, int size);
 void	push_largest_to_a(t_stacks *stacks);
+void	push_largest_to_b(t_stacks *stacks);
 int		get_pivot(t_stack *stack);
 
 // ユーティリティ関数
