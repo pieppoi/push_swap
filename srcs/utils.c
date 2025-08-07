@@ -137,8 +137,9 @@ int	get_position(t_stack *stack, int value)
 int	get_pivot(t_stack *stack)
 {
 	t_node	*current;
-	int		sum;
+	long	sum;
 	int		count;
+	int		result;
 
 	if (is_empty(stack))
 		return (0);
@@ -151,7 +152,12 @@ int	get_pivot(t_stack *stack)
 		count++;
 		current = current->next;
 	}
-	return (sum / count);
+	// 負の数の場合も正しく平均を計算するために丸めを調整
+	if (sum < 0 && sum % count != 0)
+		result = (sum / count) - 1;
+	else
+		result = sum / count;
+	return (result);
 }
 
 void	error_exit(t_stacks *stacks)
