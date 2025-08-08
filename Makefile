@@ -5,41 +5,40 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/07/30 20:23:43 by mkazuhik          #+#    #+#              #
-#    Updated: 2025/08/06 06:44:04 by mkazuhik         ###   ########.fr        #
+#    Created: 2025/08/08 01:28:20 by mkazuhik          #+#    #+#              #
+#    Updated: 2025/08/08 12:17:27 by mkazuhik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = push_swap
+NAME		= push_swap
 
-CC = cc
-CFLAGS = -Wall -Wextra -Werror -I.
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
+SRCS		= src/main.c src/utils.c src/find_func.c src/open1.c src/open2.c src/set.c src/sort.c
 
-SRCS =	$(wildcard srcs/*.c)
+OBJS		= ${SRCS:.c=.o}
 
-OBJS = $(SRCS:.c=.o)
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
 
-all: $(LIBFT) $(NAME)
+RM			= rm -f
 
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+all:		${NAME}
 
-$(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+${NAME}:	${OBJS}
+			${MAKE} -C libft
+			${CC} ${OBJS} libft/libft.a -o ${NAME}
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+			$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR) clean
+			${RM} ${OBJS}
+			${MAKE} -C libft clean
 
-fclean: clean
-	rm -f $(NAME)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+fclean:		clean
+			${RM} ${NAME}
+			${RM} libft/libft.a
 
-re: fclean all
 
-.PHONY: all clean fclean re 
+re:			fclean all
+
+.PHONY:		all clean fclean re

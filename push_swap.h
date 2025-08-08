@@ -5,99 +5,67 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/19 10:00:00 by mkazuhik          #+#    #+#             */
-/*   Updated: 2025/08/06 07:13:31 by mkazuhik         ###   ########.fr       */
+/*   Created: 2025/08/08 01:28:30 by mkazuhik          #+#    #+#             */
+/*   Updated: 2025/08/08 01:28:32 by mkazuhik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+# include <stdbool.h>
 # include "libft/libft.h"
-# include <stdio.h>
-
-typedef struct s_node
-{
-	int					value;
-	struct s_node		*next;
-	struct s_node		*prev;
-}	t_node;
 
 typedef struct s_stack
 {
-	t_node	*head;
-	t_node	*tail;
-	int		size;
-}	t_stack;
+	int	*stack;
+	int	size;
+	int	max;
+	int	min;
+}				t_stack;
 
-typedef struct s_stacks
-{
-	t_stack	*stack_a;
-	t_stack	*stack_b;
-}	t_stacks;
+//main
+int		add_to_stack(t_stack *a, char *word);
+void	init_stack(t_stack *a, t_stack *b, int size);
+void	read_arg(int argc, char **argv, t_stack *a);
+void	err_exit(void);
 
-// スタック操作関数
-t_stack	*create_stack(void);
-t_node	*create_node(int value);
-void	push(t_stack *stack, int value);
-int		pop(t_stack *stack);
-void	clear_stack(t_stack *stack);
-int		is_empty(t_stack *stack);
-int		peek(t_stack *stack);
-void	print_stack(t_stack *stack, char name);
+//ope
+void	swap_ab(t_stack *stack, char *str);
+void	swap_ss(t_stack *a, t_stack *b);
+void	push_arg1_to_arg2(t_stack *from, t_stack *to, char *str);
+void	rotate_ab(t_stack *stack, char *str);
+void	rotate_rr(t_stack *a, t_stack *b);
+void	reverse_rotate_ab(t_stack *stack, char *str);
+void	reverse_rotate_rrr(t_stack *a, t_stack *b);
+void	updata_minmax(t_stack *from, t_stack *to, int nb);
 
-// 入力検証関数
-int		is_valid_number(char *str);
-void	free_array(char **array);
-int		check_duplicates(t_stack *stack);
-int		is_sorted(t_stack *stack);
+//find
+int		find_max(t_stack *stack);
+int		find_min(t_stack *stack);
+int		find_index(t_stack *stack, int nb);
+int		find_lcost_nb(t_stack *a, t_stack *b);
+int		find_pos_b(t_stack *stack_b, int nb);
 
-// 基本操作関数
-void	sa(t_stacks *stacks);
-void	sb(t_stacks *stacks);
-void	ss(t_stacks *stacks);
-void	pa(t_stacks *stacks);
-void	pb(t_stacks *stacks);
-void	ra(t_stacks *stacks);
-void	rb(t_stacks *stacks);
-void	rr(t_stacks *stacks);
-void	rra(t_stacks *stacks);
-void	rrb(t_stacks *stacks);
-void	rrr(t_stacks *stacks);
+//sort
+bool	is_sorted(t_stack *stack);
+void	sort_three(t_stack *array);
+void	sort_big(t_stack *a, t_stack *b);
+void	push_a_phase(t_stack *a, t_stack *b);
+void	set_stack(t_stack *a, t_stack *b, int a_nb);
 
-// 入力検証関数
-int		validate_input(int argc, char **argv);
-int		check_duplicates(t_stack *stack);
-int		is_sorted(t_stack *stack);
+//set
+void	set_a_head(t_stack *a, int set_nb);
+void	set_b_tail(t_stack *b, int set_nb);
+void	set_both_rotate(t_stack *a, t_stack *b, int b_nb, int a_nb);
 
-// ソート関数
-void	sort_stack(t_stacks *stacks);
-void	sort_three_or_less(t_stacks *stacks);
-void	sort_six_or_less(t_stacks *stacks);
-void	sort_seven_or_more(t_stacks *stacks);
+//utils
+bool	is_digit_str(char *str);
+int		ps_atoi(const char *str);
+int		count_word(char **argv);
+void	all_free(char **result);
+bool	is_unique(t_stack *a);
 
-// 3個以下のソート
-void	sort_two(t_stacks *stacks);
-void	sort_three(t_stacks *stacks);
-
-// 6個以下のソート
-void	push_smallest_to_b(t_stacks *stacks);
-
-// 7個以上のソート（クイックソート）
-void	quick_sort_a_to_b(t_stacks *stacks, int size, int pi);
-void	quick_sort_b_to_a(t_stacks *stacks, int size);
-void	sort_a_to_b(t_stacks *stacks, int size);
-void	push_largest_to_a(t_stacks *stacks);
-void	sort_half_smallest_to_b(t_stacks *stacks);
-int		get_pivot(t_stack *stack);
-
-// ユーティリティ関数
-int		get_min(t_stack *stack);
-int		get_max(t_stack *stack);
-int		get_position(t_stack *stack, int value);
-void	error_exit(t_stacks *stacks);
-
-#endif 
+#endif
