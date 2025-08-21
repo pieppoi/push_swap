@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 	if (argc <= 1)
 		return (0);
 	init_stack(&a, &b, count_word(argv));
-	read_arg(argc, argv, &a);
+	read_arg(argc, argv, &a, &b);
 	if (is_sorted(&a))
 	{
 		free(a.stack);
@@ -55,29 +55,41 @@ void	init_stack(t_stack *a, t_stack *b, int size)
 	b->min = INT_MAX;
 }
 
-void	read_arg(int argc, char **argv, t_stack *a)
+void	process_split_words(char **nbs, t_stack *a, t_stack *b)
+{
+	int	index;
+
+	index = 0;
+	while (nbs[index])
+	{
+		if (add_to_stack(a, nbs[index]) == -1)
+		{
+			all_free(nbs);
+			free(a->stack);
+			free(b->stack);
+			err_exit();
+		}
+		index++;
+		a->size++;
+	}
+}
+
+void	read_arg(int argc, char **argv, t_stack *a, t_stack *b)
 {
 	int		i;
-	int		index;
 	char	**nbs;
 
 	i = 1;
 	while (i < argc)
 	{
-		index = 0;
 		nbs = ft_split(argv[i], ' ');
 		if (!nbs)
-			err_exit();
-		while (nbs[index])
 		{
-			if (add_to_stack(a, nbs[index]) == -1)
-			{
-				all_free(nbs);
-				err_exit();
-			}
-			index++;
-			a->size++;
+			free(a->stack);
+			free(b->stack);
+			err_exit();
 		}
+		process_split_words(nbs, a, b);
 		all_free(nbs);
 		i++;
 	}
@@ -85,9 +97,14 @@ void	read_arg(int argc, char **argv, t_stack *a)
 
 int	add_to_stack(t_stack *a, char *word)
 {
+	long	value;
+
 	if (!is_digit_str(word))
 		return (-1);
-	a->stack[a->size] = ps_atoi(word);
+	value = ps_atoi(word);
+	if (value == LONG_MAX)
+		return (-1);
+	a->stack[a->size] = (int)value;
 	if (!is_unique(a))
 		return (-1);
 	if (a->max < a->stack[a->size])

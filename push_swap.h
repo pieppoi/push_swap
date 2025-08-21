@@ -18,6 +18,8 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
+
+
 typedef struct s_stack
 {
 	int	*stack;
@@ -29,7 +31,8 @@ typedef struct s_stack
 //main
 int		add_to_stack(t_stack *a, char *word);
 void	init_stack(t_stack *a, t_stack *b, int size);
-void	read_arg(int argc, char **argv, t_stack *a);
+void	read_arg(int argc, char **argv, t_stack *a, t_stack *b);
+void	process_split_words(char **nbs, t_stack *a, t_stack *b);
 void	err_exit(void);
 
 //ope
@@ -63,7 +66,7 @@ void	set_both_rotate(t_stack *a, t_stack *b, int b_nb, int a_nb);
 
 //utils
 bool	is_digit_str(char *str);
-int		ps_atoi(const char *str);
+long	ps_atoi(const char *str);
 int		count_word(char **argv);
 void	all_free(char **result);
 bool	is_unique(t_stack *a);

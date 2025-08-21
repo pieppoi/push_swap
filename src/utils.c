@@ -12,26 +12,26 @@
 
 #include "../push_swap.h"
 
-int	ps_atoi(const char *str)
+long	ps_atoi(const char *str)
 {
 	long	value;
 	int		sign;
 
 	sign = 1;
 	value = 0;
-	if (*str == '-')
-		sign = -1;
 	if (*str == '-' || *str == '+')
 		str++;
+	if (*str == '-')
+		sign = -1;
 	while (*str)
 	{
 		value = value * 10 + *str - '0';
 		if ((sign == 1 && value > INT_MAX)
-			|| (sign == -1 && value - 1 > INT_MAX))
-			err_exit();
+			|| (sign == -1 && value > (long)INT_MAX + 1))
+			return (LONG_MAX);
 		str++;
 	}
-	return ((int)(value * sign));
+	return (value * sign);
 }
 
 bool	is_digit_str(char *str)
