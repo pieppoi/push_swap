@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,8 @@
 
 #include "../push_swap.h"
 
-int	main(int argc, char **argv)
+void	err_exit(void)
 {
-	t_stack	a;
-	t_stack	b;
-
-	if (argc <= 1)
-		return (0);
-	init_stack(&a, &b, count_word(argv));
-	read_arg(argc, argv, &a, &b);
-	if (is_sorted(&a))
-	{
-		free(a.stack);
-		free(b.stack);
-		return (0);
-	}
-	else if (a.size < 4)
-		sort_three(&a);
-	else
-		sort_big(&a, &b);
-	free(a.stack);
-	free(b.stack);
-	return (0);
+	ft_putstr_fd("Error\n", 2);
+	exit(1);
 }
