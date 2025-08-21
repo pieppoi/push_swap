@@ -20,7 +20,7 @@ int	main(int argc, char **argv)
 	if (argc <= 1)
 		return (0);
 	init_stack(&a, &b, count_word(argv));
-	read_arg(argc, argv, &a);
+	read_arg(argc, argv, &a, &b);
 	if (is_sorted(&a))
 	{
 		free(a.stack);
@@ -55,7 +55,7 @@ void	init_stack(t_stack *a, t_stack *b, int size)
 	b->min = INT_MAX;
 }
 
-void	read_arg(int argc, char **argv, t_stack *a)
+void	read_arg(int argc, char **argv, t_stack *a, t_stack *b)
 {
 	int		i;
 	int		index;
@@ -67,12 +67,18 @@ void	read_arg(int argc, char **argv, t_stack *a)
 		index = 0;
 		nbs = ft_split(argv[i], ' ');
 		if (!nbs)
+		{
+			free(a->stack);
+			free(b->stack);
 			err_exit();
+		}
 		while (nbs[index])
 		{
 			if (add_to_stack(a, nbs[index]) == -1)
 			{
 				all_free(nbs);
+				free(a->stack);
+				free(b->stack);
 				err_exit();
 			}
 			index++;
