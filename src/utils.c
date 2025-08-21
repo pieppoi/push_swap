@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../push_swap.h"
-#include <errno.h>
 
 long	ps_atoi(const char *str)
 {
@@ -20,18 +19,16 @@ long	ps_atoi(const char *str)
 
 	sign = 1;
 	value = 0;
-	if (*str == '-')
-		sign = -1;
 	if (*str == '-' || *str == '+')
 		str++;
+	if (*str == '-')
+		sign = -1;
 	while (*str)
 	{
 		value = value * 10 + *str - '0';
 		if ((sign == 1 && value > INT_MAX)
 			|| (sign == -1 && value > (long)INT_MAX + 1))
-		{
 			return (LONG_MAX);
-		}
 		str++;
 	}
 	return (value * sign);

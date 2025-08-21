@@ -18,7 +18,7 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
-# define ATOI_ERROR -1
+
 
 typedef struct s_stack
 {
@@ -31,7 +31,8 @@ typedef struct s_stack
 //main
 int		add_to_stack(t_stack *a, char *word);
 void	init_stack(t_stack *a, t_stack *b, int size);
-void	read_arg(int argc, char **argv, t_stack *a);
+void	read_arg(int argc, char **argv, t_stack *a, t_stack *b);
+void	process_split_words(char **nbs, t_stack *a, t_stack *b);
 void	err_exit(void);
 
 //ope
