@@ -6,7 +6,7 @@
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 01:27:27 by mkazuhik          #+#    #+#             */
-/*   Updated: 2025/08/08 12:26:37 by mkazuhik         ###   ########.fr       */
+/*   Updated: 2025/08/21 17:53:38 by mkazuhik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	find_index(t_stack *stack, int nb)
 	return (i);
 }
 
-//add times to move stack_a ,stack_b
-//return most lowcost number
 int	find_lcost_nb(t_stack *a, t_stack *b)
 {
 	int	curr_cost;

@@ -6,13 +6,13 @@
 #    By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/08 01:28:20 by mkazuhik          #+#    #+#              #
-#    Updated: 2025/08/08 12:17:27 by mkazuhik         ###   ########.fr        #
+#    Updated: 2025/08/21 17:55:56 by mkazuhik         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= push_swap
 
-SRCS		= src/main.c src/utils.c src/find_func.c src/open1.c src/open2.c src/set.c src/sort.c
+SRCS		= src/main.c src/utils.c src/find_func.c src/open1.c src/open2.c src/set.c src/sort.c src/error.c
 
 OBJS		= ${SRCS:.c=.o}
 

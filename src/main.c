@@ -6,7 +6,7 @@
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 01:27:36 by mkazuhik          #+#    #+#             */
-/*   Updated: 2025/08/08 12:25:57 by mkazuhik         ###   ########.fr       */
+/*   Updated: 2025/08/21 17:55:04 by mkazuhik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,10 +112,4 @@ int	add_to_stack(t_stack *a, char *word)
 	if (a->min > a->stack[a->size])
 		a->min = a->stack[a->size];
 	return (0);
-}
-
-void	err_exit(void)
-{
-	ft_putstr_fd("Error\n", 2);
-	exit(1);
 }
