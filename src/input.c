@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkazuhik <mkazuhik@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,26 +12,42 @@
 
 #include "../push_swap.h"
 
-int	main(int argc, char **argv)
+void	process_split_words(char **nbs, t_stack *a, t_stack *b)
 {
-	t_stack	a;
-	t_stack	b;
+	int	index;
 
-	if (argc <= 1)
-		return (0);
-	init_stack(&a, &b, count_word(argv));
-	read_arg(argc, argv, &a, &b);
-	if (is_sorted(&a))
+	index = 0;
+	while (nbs[index])
 	{
-		free(a.stack);
-		free(b.stack);
-		return (0);
+		if (add_to_stack(a, nbs[index]) == -1)
+		{
+			all_free(nbs);
+			free(a->stack);
+			free(b->stack);
+			err_exit();
+		}
+		index++;
+		a->size++;
 	}
-	else if (a.size < 4)
-		sort_three(&a);
-	else
-		sort_big(&a, &b);
-	free(a.stack);
-	free(b.stack);
-	return (0);
+}
+
+void	read_arg(int argc, char **argv, t_stack *a, t_stack *b)
+{
+	int		i;
+	char	**nbs;
+
+	i = 1;
+	while (i < argc)
+	{
+		nbs = ft_split(argv[i], ' ');
+		if (!nbs)
+		{
+			free(a->stack);
+			free(b->stack);
+			err_exit();
+		}
+		process_split_words(nbs, a, b);
+		all_free(nbs);
+		i++;
+	}
 }
