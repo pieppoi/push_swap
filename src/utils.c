@@ -11,8 +11,9 @@
 /* ************************************************************************** */
 
 #include "../push_swap.h"
+#include <errno.h>
 
-int	ps_atoi(const char *str)
+long	ps_atoi(const char *str)
 {
 	long	value;
 	int		sign;
@@ -28,10 +29,10 @@ int	ps_atoi(const char *str)
 		value = value * 10 + *str - '0';
 		if ((sign == 1 && value > INT_MAX)
 			|| (sign == -1 && value - 1 > INT_MAX))
-			err_exit();
+			return (LONG_MAX);
 		str++;
 	}
-	return ((int)(value * sign));
+	return (value * sign);
 }
 
 bool	is_digit_str(char *str)

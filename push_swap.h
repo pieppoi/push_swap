@@ -18,6 +18,8 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
+# define ATOI_ERROR 0
+
 typedef struct s_stack
 {
 	int	*stack;
@@ -63,7 +65,7 @@ void	set_both_rotate(t_stack *a, t_stack *b, int b_nb, int a_nb);
 
 //utils
 bool	is_digit_str(char *str);
-int		ps_atoi(const char *str);
+long	ps_atoi(const char *str);
 int		count_word(char **argv);
 void	all_free(char **result);
 bool	is_unique(t_stack *a);

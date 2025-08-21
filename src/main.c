@@ -85,9 +85,14 @@ void	read_arg(int argc, char **argv, t_stack *a)
 
 int	add_to_stack(t_stack *a, char *word)
 {
+	long	value;
+
 	if (!is_digit_str(word))
 		return (-1);
-	a->stack[a->size] = ps_atoi(word);
+	value = ps_atoi(word);
+	if (value == LONG_MAX)
+		return (-1);
+	a->stack[a->size] = (int)value;
 	if (!is_unique(a))
 		return (-1);
 	if (a->max < a->stack[a->size])
