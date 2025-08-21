@@ -24,7 +24,7 @@ static char	**all_free(char **b, int i)
 	return (0);
 }
 
-static void	input_word(char *word, char const *s, int count, int c)
+static void	input_word(char *word, char const *s, int c)
 {
 	int	i;
 
@@ -32,7 +32,6 @@ static void	input_word(char *word, char const *s, int count, int c)
 	while (s[i] && s[i] != c)
 	{
 		word[i] = s[i];
-		count++;
 		i++;
 	}
 	word[i] = '\0';
@@ -83,7 +82,7 @@ char	**ft_split1(char const *s, char c, char **b, int sep)
 		b[word] = (char *)malloc(sizeof(char) * (l_count + 1));
 		if (!b[word])
 			return (all_free(b, i));
-		input_word(b[word], s - l_count, l_count, c);
+		input_word(b[word], s - l_count, c);
 		l_count = 0;
 		word++;
 	}
