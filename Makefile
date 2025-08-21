@@ -12,7 +12,7 @@
 
 NAME		= push_swap
 
-SRCS		= src/main.c src/utils.c src/find_func.c src/open1.c src/open2.c src/set.c src/sort.c src/stack.c src/input.c src/error.c
+SRCS		= src/main.c src/utils.c src/find_func.c src/open1.c src/open2.c src/set.c src/sort.c
 
 OBJS		= ${SRCS:.c=.o}
 
