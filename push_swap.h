@@ -18,7 +18,7 @@
 # include <stdbool.h>
 # include "libft/libft.h"
 
-# define ATOI_ERROR 0
+# define ATOI_ERROR -1
 
 typedef struct s_stack
 {
